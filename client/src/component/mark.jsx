@@ -9,16 +9,16 @@ function Mark(){
     //ambil data yang complete saja
     useEffect(() => {
         axios
-        .get("http://localhost:3000/completed")
+        .get("http://localhost:3000/todos/completed")
         .then((res)=> {
-            setCompletedTodos(res.data);
+            setCompletedTodos(res.data.data);
         })
         .catch((err)=> console.error("Gagal ambil data:", err));
     }, []);
     // Delete task complete
     const deleteTodo = async (id) => {
         try{
-            await axios.delete(`http://localhost/todos/${id}`);
+            await axios.delete(`http://localhost:3000/todos/${id}`);
             setCompletedTodos((prev)=> prev.filter((todo)=> todo.id !== id));
         }catch(error){
             console.error("Gagal hapus todo: ", error);

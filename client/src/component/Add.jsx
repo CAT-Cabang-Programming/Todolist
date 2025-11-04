@@ -12,9 +12,9 @@ function Add (){
     const navigate = useNavigate();
     useEffect(()=>{
         axios
-        .get("http://localhost:3000/Addtodos")
+        .get("http://localhost:3000/todos/incomplete")
         .then((res)=>{
-            setTodoList(res.data);
+            setTodoList(res.data.data);
         })
         .catch((err)=> console.error("Gagal ambil data:", err));
     }, []);
@@ -28,8 +28,8 @@ function Add (){
             isComplete: false, 
         };
         try{
-            const res = await axios.post("http://localhost:3000/addtodo", newTodo);
-            setTodoList((prev)=> [...prev, res.data]);
+            const res = await axios.post("http://localhost:3000/todos/add", newTodo);
+            setTodoList((prev)=> [...prev, res.data.data]);
             inputRef.current.value = "";
             setDeadline("");
         }catch (error){
@@ -39,7 +39,7 @@ function Add (){
     // Delete task
     const deleteTodo =  async (id) =>{
         try{
-            await axios.delete(`http://localhost:5000/todos/${id}`);
+            await axios.delete(`http://localhost:3000/todos/${id}`);
             setTodoList((prev)=> prev.filter((todo)=> todo.id !== id));
         }catch(error){
             console.error("Gagal hapus todo:", error);
