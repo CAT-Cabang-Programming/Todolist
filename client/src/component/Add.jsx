@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import axios from "axios";
+import axiosInstance from "../axiosInstance";
 import { Link, useNavigate } from "react-router-dom";
 import "../index.css";
 import todo_icon from "../icon/todo_icon.png";
@@ -9,13 +9,10 @@ function Add() {
   const [deadline, setDeadline] = useState("");
   const [todoList, setTodoList] = useState([]);
   const inputRef = useRef();
-  const token = localStorage.getItem("token");
   const navigate = useNavigate();
   useEffect(() => {
-    axios
-      .get("http://localhost:3000/todos/incomplete", {
-        headers: { Authorization: `Bearer ${token}` },
-      })
+    axiosInstance
+      .get("/todos/incomplete")
       .then((res) => {
         setTodoList(res.data.data);
       })
@@ -29,12 +26,10 @@ function Add() {
     if (!inputText || !deadline) return;
     const newTodo = {
       text: inputText,
-      deadline,
+      deadline: deadline,
     };
     try {
-      const res = await axios.post("http://localhost:3000/todos/add", newTodo, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const res = await axiosInstance.post("/todos/add", newTodo);
       setTodoList((prev) => [...prev, res.data.data]);
       inputRef.current.value = "";
       setDeadline("");
@@ -45,9 +40,7 @@ function Add() {
   // Delete task
   const deleteTodo = async (id) => {
     try {
-      await axios.delete(`http://localhost:3000/todos/${id}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      await axiosInstance.delete(`/todos/${id}`);
       setTodoList((prev) => prev.filter((todo) => todo.id !== id));
     } catch (error) {
       console.error("Gagal hapus todo:", error);
@@ -60,17 +53,11 @@ function Add() {
 
     try {
       const updatedTodo = { ...todo, isComplete: !todo.isComplete };
-      await axios.put(`http://localhost:3000/todos/${id}`, updatedTodo, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      await axiosInstance.put(`/todos/${id}`, updatedTodo);
 
-      const updatedList = todoList.map((t) => (t.id === id ? updatedTodo : t));
-      setTodoList(updatedList);
-
-      // pindah ke halaman completed jika status complete
-      if (updatedTodo.isComplete) {
-        setTimeout(() => navigate("/completed"), 200);
-      }
+      if(updatedTodo.isComplete){
+        setTodoList((prev)=> prev.filter((t)=> t.id !== id));
+      } 
     } catch (error) {
       console.error("Gagal update todo:", error);
     }

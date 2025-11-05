@@ -5,6 +5,7 @@ import Register from "./pages/register";
 import AuthLayout from "./layout/Authlayout";
 import Home from "./pages/home";
 import Completed from "./pages/completed";
+import ProtectedRoute from "./component/protectedRoute";
 
 function App() {
   return (
@@ -25,8 +26,18 @@ function App() {
           </AuthLayout>
         }
       />
-      <Route path="/home" element={<Home />} />
-      <Route path="/completed" element={<Completed />} />
+      <Route path="/home" 
+      element={
+        <ProtectedRoute>
+          <Home />
+        </ProtectedRoute>
+      } />
+      <Route path="/completed" 
+      element={
+        <ProtectedRoute>
+          <Completed />
+        </ProtectedRoute>
+      } />
     </Routes>
   );
 }

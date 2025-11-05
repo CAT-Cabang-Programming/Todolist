@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import axiosInstance from '../axiosInstance';
 import { Link, useNavigate } from 'react-router-dom';
 import '../index.css';
 
@@ -7,6 +7,7 @@ function Navbar (){
     const [isFixed, setIsFixed] = useState(false);
     const [open, setOpen] = useState(false);
     const [showLogoutButton, setShowLogoutButton] = useState(false);
+    const navigate = useNavigate();
     useEffect(() => {
         const handleScroll = () => {
             setIsFixed(window.pageYOffset > 0);
@@ -18,12 +19,11 @@ function Navbar (){
     //Logout
     const handleLogout = async () => {
         try{
-            await axios.post("http://localhost:3000/logout");
-            localStorage.removeItem("authToken");
-                
+            await axiosInstance.post("/logout").catch(()=> {});
+        }finally{
+            localStorage.removeItem("token");
+            alert("Logout berhasil!");
             navigate("/login");
-        } catch (error) {
-            console.error("Gagal logout:", error);
         }
     };
     const handleLogoutClick = () => {
@@ -71,7 +71,7 @@ function Navbar (){
                                     {showLogoutButton ? (
                                         <button onClick={handleLogout} className="mx-7 px-3 py-2 text-sm font-medium text-white bg-sky-500 rounded-xl hover:bg-sky-300 transition duration-150 ease-in-out shadow-md right-0 lg:static z-20" >Confirm Log Out</button>
                                     ): (
-                                        <a  className="text-base font-semibold text-dark py-2 mx-8 flex group-hover:text-sky-900 cursor-pointer" onClick={handleLogoutClick}>Log Out</a>
+                                        <button onClick={handleLogoutClick}  className="text-base font-semibold text-dark py-2 mx-8 flex group-hover:text-sky-900 cursor-pointer" >Log Out</button>
                                     )}
                                     
                                     

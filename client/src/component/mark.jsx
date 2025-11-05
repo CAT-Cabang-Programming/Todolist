@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import axios from "axios";
+import axiosInstance from "../axiosInstance";
 import "../index.css";
 import todo_icon from "../icon/todo_icon.png";
 import Todolist from "./todolist";
@@ -9,26 +9,37 @@ function Mark() {
   const token = localStorage.getItem("token");
   //ambil data yang complete saja
   useEffect(() => {
-    axios
-      .get("http://localhost:3000/todos/completed", {
-        headers: { Authorization: `Bearer ${token}` },
-      })
+    axiosInstance
+      .get("/todos/completed")
       .then((res) => {
         setCompletedTodos(res.data.data);
       })
       .catch((err) => console.error("Gagal ambil data:", err));
-  }, []);
+  }, [token]);
   // Delete task complete
   const deleteTodo = async (id) => {
     try {
-      await axios.delete(`http://localhost:3000/todos/${id}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      await axiosInstance.delete(`/todos/${id}`);
       setCompletedTodos((prev) => prev.filter((todo) => todo.id !== id));
     } catch (error) {
       console.error("Gagal hapus todo: ", error);
     }
   };
+  const toggle = async (id) => {
+    const todo = completedTodos.find((t)=> t.id === id);
+    if (!todo) return;
+
+    try{
+      const updatedTodo = {...todo, isComplete: !todo.isComplete};
+      await axiosInstance.put(`/todos/${id}`, updatedTodo);
+
+      if(!updatedTodo.isComplete){
+        setCompletedTodos((prev)=> prev.filter((t)=> t.id !== id));
+      }
+    } catch (error){
+      console.error("Gagal ubah jadi incomplete:", error);
+    }
+  }
 
   return (
     <div className="bg-sky-100 h-screen pt-30">
@@ -52,6 +63,7 @@ function Mark() {
                   id={item.id}
                   isComplete={item.isComplete}
                   deleteTodo={deleteTodo}
+                  toggle={toggle}
                 />
               );
             })

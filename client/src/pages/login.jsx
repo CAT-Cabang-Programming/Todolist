@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import axiosInstance from '../axiosInstance';
 import { Link, useNavigate } from 'react-router-dom';
 import '../index.css';
 function Login() {
@@ -17,7 +17,7 @@ function Login() {
         e.preventDefault();
         
         try{
-            const res = await axios.post("http://localhost:3000/user/login", {
+            const res = await axiosInstance.post("/user/login", {
                 username,
                 password,
             });
