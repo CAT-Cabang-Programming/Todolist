@@ -6,6 +6,7 @@ const ProtectedRoute = ({ children }) => {
 
   if (!token) {
     // Kalau belum login redirect ke halaman login
+    localStorage.removeItem('user-info')
     return <Navigate to="/login" replace />;
   }
 
