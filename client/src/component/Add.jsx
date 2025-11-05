@@ -79,7 +79,7 @@ function Add() {
           ></input>
           <input
             onChange={(e) => setDeadline(e.target.value)}
-            className="bg-white text-left border-gray-100 border-2 p-4  mt-1 rounded-xl shadow-md w-[100px] max-w-full "
+            className="bg-white text-left border-gray-100 border-2 p-4  mt-1 rounded-xl shadow-md w-[200px] max-w-full "
             type="datetime-local"
             placeholder="Add your Deadline"
           ></input>
