@@ -20,10 +20,14 @@ export const addNewTodo = async (todoData) => {
   return todo;
 };
 
-export const findAllIncompletes = async () => {
+export const findAllIncompletes = async (userId) => {
   const todos = await prisma.todos.findMany({
     where: {
+      authorId: userId,
       isComplete: false,
+    },
+    orderBy: {
+      createdAt: "desc",
     },
     include: {
       author: {
@@ -38,10 +42,14 @@ export const findAllIncompletes = async () => {
   return todos;
 };
 
-export const findAllCompletes = async () => {
+export const findAllCompletes = async (userId) => {
   const completed = await prisma.todos.findMany({
     where: {
+      authorId: userId,
       isComplete: true,
+    },
+    orderBy: {
+      createdAt: "desc",
     },
     include: {
       author: {
@@ -59,7 +67,7 @@ export const findAllCompletes = async () => {
 export const changeTodo = async (id, todoData) => {
   const updated = await prisma.todos.update({
     where: {
-      id,
+      id: parseInt(id),
     },
     data: {
       isComplete: todoData.isComplete,
@@ -80,7 +88,7 @@ export const changeTodo = async (id, todoData) => {
 export const dropTodo = async (id) => {
   const deleted = await prisma.todos.delete({
     where: {
-      id,
+      id: parseInt(id),
     },
   });
 

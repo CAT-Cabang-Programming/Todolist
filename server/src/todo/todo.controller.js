@@ -28,7 +28,8 @@ router.post("/add", async (req, res) => {
 
 router.get("/incomplete", async (req, res) => {
   try {
-    const todos = await getAllIncompletes();
+    const userId = req.user.id;
+    const todos = await getAllIncompletes(userId);
     res.status(200).json({
       data: todos,
     });
@@ -41,7 +42,8 @@ router.get("/incomplete", async (req, res) => {
 
 router.get("/completed", async (req, res) => {
   try {
-    const completeds = await getAllCompletes();
+    const userId = req.user.id;
+    const completeds = await getAllCompletes(userId);
     res.status(200).json({
       data: completeds,
     });
@@ -54,7 +56,7 @@ router.get("/completed", async (req, res) => {
 
 router.put("/:id", async (req, res) => {
   try {
-    const todoId = parseInt(req.params.id);
+    const todoId = req.params.id;
     const todoData = req.body;
 
     await updateTodo(todoId, todoData);
@@ -67,7 +69,7 @@ router.put("/:id", async (req, res) => {
 
 router.delete("/:id", async (req, res) => {
   try {
-    const todoId = parseInt(req.params.id);
+    const todoId = req.params.id;
 
     await deleteTodo(todoId);
 

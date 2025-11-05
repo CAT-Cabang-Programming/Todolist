@@ -12,14 +12,14 @@ export const addTodo = async (todoData) => {
   return addedTodo;
 };
 
-export const getAllIncompletes = async () => {
-  const incompleted = await findAllIncompletes();
+export const getAllIncompletes = async (userId) => {
+  const incompleted = await findAllIncompletes(userId);
 
   return incompleted;
 };
 
-export const getAllCompletes = async () => {
-  const completed = await findAllCompletes();
+export const getAllCompletes = async (userId) => {
+  const completed = await findAllCompletes(userId);
 
   return completed;
 };
