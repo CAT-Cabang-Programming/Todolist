@@ -3,7 +3,6 @@ import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import { createUser, getUserByName } from "./user.service.js";
 
-dotenv.config();
 const router = express.Router();
 const secret = process.env.JWT_SECRET;
 
