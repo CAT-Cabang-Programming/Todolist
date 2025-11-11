@@ -1,7 +1,6 @@
 import express from "express";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
-import dotenv from "dotenv";
 import { createUser, getUserByName } from "./user.service.js";
 
 dotenv.config();
